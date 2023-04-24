@@ -12,8 +12,6 @@ import discord, {
 } from "discord.js"
 import fs from "fs/promises"
 import {convertPermissions, Perm} from "./discordPermissions"
-import Config from "../../types/config";
-
 export async function listCommands(){
     try {
         const commandFolder =
@@ -119,14 +117,14 @@ export default class Command {
     permissions: Perm[]
     description: string
     options: Option[]
-    run: (interaction: InteractionCommand, config: Config) => void;
+    run: (interaction: InteractionCommand) => void;
     
     constructor(settings: {
         name: string,
         permissions: Perm[],
         description: string,
         options?: Option[],
-        run: (interaction: InteractionCommand, config: Config) => void,
+        run: (interaction: InteractionCommand) => void,
     }){
         this.name = settings.name
         this.description = settings.description

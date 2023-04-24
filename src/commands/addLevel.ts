@@ -1,6 +1,7 @@
-import { EmbedBuilder } from "discord.js";
-import Command, { NumberOption, StringOption } from "../utils/discord/commandHandler";
+import {EmbedBuilder} from "discord.js";
+import Command, {NumberOption, StringOption} from "../utils/discord/commandHandler";
 import levelScheme from "../schemes/levelRewardScheme";
+
 export default new Command({
     name: "add-levelreward",
     description: "Adds a level reward to the server.",
@@ -17,11 +18,11 @@ export default new Command({
         }
     ],
     permissions: ["MANAGE_GUILD"],
-    async run(interaction){
-        const { value: level } = interaction.options.get("level", true) as NumberOption
-        const { value: reward } = interaction.options.get("reward", true) as StringOption
-        const guild = interaction.guild
-        if(guild === null){
+    async run(interaction) {
+        const {value: level} = interaction.options.get("level", true) as NumberOption
+        const {value: reward} = interaction.options.get("reward", true) as StringOption
+        const { guild } = interaction
+        if (guild === null) {
             const guildsOnlyEmbed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("This command can only be used in a guild.")
@@ -30,7 +31,7 @@ export default new Command({
             return
         }
         const role = await guild.roles.fetch(reward)
-        if(role === null){
+        if (role === null) {
             const invalidRoleEmbed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("The role you provided is invalid.")
@@ -39,19 +40,17 @@ export default new Command({
             return
         }
         const guildID = guild.id
-        const guildData = await levelScheme.findOne( { guildID } ).exec()
-        if(guildData === null){
+        const guildData = await levelScheme.findOne({guildID}).exec()
+        if (guildData === null) {
             // Create new data
-            levelScheme.create({ guildID, levelRewards: { level, rewards: [reward] } })
-        }
-        else {
+            levelScheme.create({guildID, levelRewards: {level, rewards: [reward]}})
+        } else {
             // Update data
             const levelRewards = guildData.levelRewards
-            const levelReward = levelRewards.find( (levelReward) => levelReward.level === level )
-            if(levelReward === undefined){
-                levelRewards.push({ level, rewards: [reward] })
-            }
-            else {
+            const levelReward = levelRewards.find((levelReward) => levelReward.level === level)
+            if (levelReward === undefined) {
+                levelRewards.push({level, rewards: [reward]})
+            } else {
                 levelReward.rewards.push(reward)
             }
             await guildData.save()

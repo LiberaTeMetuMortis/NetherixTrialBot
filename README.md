@@ -6,7 +6,7 @@
 * Clone this repository
 * Run `npm install` in the directory of the repository
 * Run `npm build` in the directory of the repository
-* Edit `.env` file with your secrets
+* Copy `.env.example` file with name `.env` and edit with your secrets
 * Run `node .` in the directory of the repository
 
 ## Bot Details

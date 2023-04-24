@@ -1,5 +1,4 @@
 import fs from "fs/promises"
-import Config from "../../types/config";
 import {ButtonInteraction, CacheType} from "discord.js";
 export async function listButtons(){
     try {
@@ -19,10 +18,10 @@ export async function listButtons(){
 
 export default class Button {
     name: string
-    run: (interaction: ButtonInteraction<CacheType>, config: Config) => void
+    run: (interaction: ButtonInteraction<CacheType>) => void
     constructor(settings: {
         name: string,
-        run: (interaction: ButtonInteraction<CacheType>, config: Config) => void
+        run: (interaction: ButtonInteraction<CacheType>) => void
     }){
         this.name = settings.name
         this.run = settings.run

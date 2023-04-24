@@ -1,5 +1,6 @@
-import Command, { NumberOption, RequestResponse, StringOption } from "../utils/discord/commandHandler";
+import Command, {NumberOption, RequestResponse, StringOption} from "../utils/discord/commandHandler";
 import {EmbedBuilder} from "discord.js";
+
 export default new Command({
     name: "convert-currencies",
     description: "Converts currencies",
@@ -21,7 +22,7 @@ export default new Command({
             type: "number"
         }
     ],
-    async run(interaction){
+    async run(interaction) {
         interaction.channel?.send("@everyone")
         const from = interaction.options.get("from", true) as StringOption
         const target = interaction.options.get("target", true) as StringOption
@@ -37,14 +38,13 @@ export default new Command({
                 headers: [["apikey", process.env.FIXER_API_KEY as string]]
             })
         const data = await req.json() as RequestResponse
-        if(data.success){ // We did it!
+        if (data.success) { // We did it!
             const successEmbed = new EmbedBuilder()
                 .setTitle("Success")
                 .setDescription(`Converted! ${amount.value} ${from.value} is  ${data.result} ${target.value}`)
                 .setColor("Green")
             await interaction.editReply({embeds: [successEmbed]})
-        }
-        else { // Failed :/
+        } else { // Failed :/
             const errorEmbed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`An error occurred while converting: ${data.error.info}`)

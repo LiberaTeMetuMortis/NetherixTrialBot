@@ -1,5 +1,6 @@
 import Command from "../utils/discord/commandHandler";
 import {EmbedBuilder} from "discord.js";
+
 export default new Command({
     name: "ban",
     description: "Ban a user",
@@ -11,9 +12,9 @@ export default new Command({
         }
     ],
     permissions: ["BAN_MEMBERS"],
-    async run(interaction){
+    async run(interaction) {
         const user = interaction.options.getUser("member", true)
-        if(interaction.guild === null){
+        if (interaction.guild === null) {
             const guildsOnlyEmbed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("This command can only be used in a guild.")
@@ -22,7 +23,7 @@ export default new Command({
             return
         }
         const member = await interaction.guild.members.fetch(user.id)
-        if(member === undefined){
+        if (member === undefined) {
             const memberNotFoundEmbed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Member not found")
@@ -30,14 +31,13 @@ export default new Command({
             await interaction.reply({embeds: [memberNotFoundEmbed]})
         }
         try {
-            await member.ban({ reason: `Banned by ${interaction.user.tag} (${interaction.user.id})` } )
+            await member.ban({reason: `Banned by ${interaction.user.tag} (${interaction.user.id})`})
             const banSuccessEmbed = new EmbedBuilder()
                 .setTitle("Success")
                 .setDescription(`Successfully banned ${member.user.tag}`)
                 .setColor("Green")
             await interaction.reply({embeds: [banSuccessEmbed]})
-        }
-        catch (e){
+        } catch (e) {
             const banFailedEmbed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`Failed to ban ${member.user.tag}`)
